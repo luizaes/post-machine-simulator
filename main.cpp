@@ -4,11 +4,12 @@
 #include <vector>
 #include <cstring>
 
+using namespace std;
+
+/* Definições */
 #define NONE '$'
 #define ACCEPT 1
 #define REJECT 0
-
-using namespace std;
 
 typedef struct state {
 	string nome;
@@ -37,34 +38,36 @@ int main() {
 	bool erro = false, acheiEstado = false;
 	char simbolo, simboloFila = NONE, auxChar;
 
-	/* Leio a quantidade de estados */
-	//cout << "Quantos estados sua máquina de Post possui?" << endl;
+	/* Leio a quantidade de estados que a máquina possui */
 	cin >> qtdEstados;
 
-	//cout << "Descreva o nome de cada um dos estados a seguir:" << endl;
-	/* Leio o nome de cada estados, guardando na lista de adjacência */
+	/* Leio o nome de cada um dos estados, guardando na lista de adjacência */
 	for (i = 0; i < qtdEstados; i++) {
 		cin >> estado;
 		nodeAux.nome = estado;
 		diagramaFluxo.push_back(nodeAux);
 	}
 
-	//cout << "Qual desses estados é a partida do diagrama?" << endl;
+	/* Guardo o estado inicial */
 	cin >> partida;
 
-	//cout << "Qual desses estados é o fim do diagrama (estado de aceitação)?" << endl;
+	/* Guardo o estado de aceitação - neste caso não temos um estado de rejeição, 
+	   a máquina morre por indefinição para rejeitar uma palavra */
 	cin >> aceitacao;
 
-	//cout << "Quantas transições você gostaría de especificar?" << endl;
+	/* Guardo quantas "transições" ou ligações existem no diagrama */
 	cin >> qtdTransicoes;
 
-	//cout << "Descreva cada uma das transições a seguir:" << endl;
-
+	/* Descrevo cada ligação */
 	for(i = 0; i < qtdTransicoes; i++) {
 		cin >> transicao;
 		for (j = 0; j < qtdEstados; j++) {
+
+			/* Se o estado especificado na transição existe */
 			if(diagramaFluxo[j].nome.compare(transicao) == 0) {
 				acheiEstado = true;
+
+				/* Caso a transição comece com um estado do tipo READ */
 				if(transicao.front() == 'R' || transicao.front() == 'r') {
 					cin >> simbolo;
 					getline(cin, transicao);
@@ -83,6 +86,8 @@ int main() {
 					stateAux.simboloAddFila = simboloFila;
 					simboloFila = NONE;
 					diagramaFluxo[j].fluxos.push_back(stateAux);
+
+				/* Caso a transição comece com um estado do tipo START (partida) */
 				} else if(transicao.compare(partida) == 0) {
 					getline(cin, transicao);
 					if(transicao.at(1) == 'A' || transicao.at(1) == 'a') {
@@ -98,6 +103,8 @@ int main() {
 					erro = true;
 					erroText = "[ERRO] O estado de aceitação não pode ter nenhuma transição para outro estado!";
 					break;
+
+				/* Caso a transição comece com um estado do tipo ADD */
 				} else if(transicao.front() == 'A' || transicao.front() == 'a') {
 					cin >> simbolo;
 					getline(cin, transicao);
@@ -120,6 +127,7 @@ int main() {
 				break;
 			}
 		}
+
 		if(!acheiEstado) {
 			erro = true;
 			erroText = "[ERRO] O estado da transição especificada não existe!";
@@ -129,11 +137,15 @@ int main() {
 		}
 	}
 
+	/* No caso de algum erro */ 
 	if(erro) {
 		cout << erro << endl;
 	} else {
+
+		/* Se nenhum problema ocorreu, verificamos se a entrada é aceita pela MP */
 		cout << "[SUCESSO] Diagrama de Fluxo da Máquina de Post criado com sucesso." << endl;
-		//cout << "Qual entrada você deseja verificar?" << endl;
+
+		/* Pegamos a palavra de entrada */
 		cin >> entrada;
 
 		for(i = 0; entrada[i] != '\0'; i++) {
@@ -146,6 +158,7 @@ int main() {
 			}
 		}
 
+		/* Simulo a palavra através do diagrama e da fila */
 		resultado = percorreDiagrama(i);
 	}
 
@@ -166,13 +179,18 @@ int percorreDiagrama(int num) {
 	string nome;
 	list<state>::iterator it;
 
+	/* Caso a fila esteja vazia e ainda não atingimos o estado de aceitação - rejeite
+	   Caso alcançarmos o estado final - aceite */ 
 	if(diagramaFluxo[num].nome.compare(aceitacao) == 0) {
 		return ACCEPT;
 	} else if(filaX.empty()) {
 		return REJECT;
 	}
 
+	/* Caso esteja em um estado do tipo READ */
 	if(diagramaFluxo[num].nome.front() == 'R' || diagramaFluxo[num].nome.front() == 'r') {
+		
+		/* Verifico qual o primeiro elemento da fila */
 		simbolo = filaX.front();
 		for(it = diagramaFluxo[num].fluxos.begin(); it != diagramaFluxo[num].fluxos.end(); it++) {
 			if((*it).simboloLeitura == simbolo) {
@@ -182,9 +200,13 @@ int percorreDiagrama(int num) {
 				break;
 			}
 		}
+
+		/* Se a transição não for encontrada, a MP morre por indefinição */
 		if(!acheiTransicao) {
 			return REJECT;
 		} else {
+
+			/* Retiro o elemento da fila, pois já foi lido */
 			filaX.pop();
 			for(i = 0; i < diagramaFluxo.size(); i++) {
 				if(nome.compare(diagramaFluxo[i].nome) == 0) {
@@ -195,6 +217,8 @@ int percorreDiagrama(int num) {
 				}
 			}
 		}
+
+	/* Caso esteja em um estado do tipo ADD ou START */
 	} else {
 		nome = diagramaFluxo[num].fluxos.front().nome;
 		simboloFila = diagramaFluxo[num].fluxos.front().simboloAddFila;
