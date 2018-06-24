@@ -1,6 +1,6 @@
 # Simulador de Máquina de Post
 Simulador de [Máquinas de Post](http://www.iasi.cnr.it/~adp/ErrataCorrige/errataCorrigeCDCSection9.1.pdf) desenvolvido para a disciplina de Teoria da Computação (TEC).
-#### Instruções de Execução
+### Instruções de Execução
 Clonar este repositório:
 
     git clone https://github.com/luizaes/post-machine-simulator.git pm-simulator
@@ -15,9 +15,9 @@ Executar o Makefile:
 
 Executar o programa, passando como entrada o arquivo descrevendo a máquina de Post:
 
-    ./post-machine < `pm_example1.txt`
+    ./post-machine < pm_example1.txt
 
-#### Instruções para Formatação do Arquivo de Entrada
+### Instruções para Formatação do Arquivo de Entrada
 
 * Na primeira linha, deve ser informada a quantidade de estados que a máquina de Post possui, ou seja, o número de classes que representam o diagrama de fluxos;
 * Em sequência, uma lista especificando o nome de cada um dos estados deve ser apresentada. É obrigatório que cada estado possua um identificador único, e que, no caso de ser um estado do tipo desvio, tenha um identificador que inicie com a palavra-chave READ, ou se for do tipo atribuição, inicie com a palavra ADD;
