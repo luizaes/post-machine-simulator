@@ -139,7 +139,7 @@ int main() {
 
 	/* No caso de algum erro */ 
 	if(erro) {
-		cout << erro << endl;
+		cout << erroText << endl;
 	} else {
 
 		/* Se nenhum problema ocorreu, verificamos se a entrada é aceita pela MP */

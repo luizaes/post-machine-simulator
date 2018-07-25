@@ -1,5 +1,5 @@
 # Simulador de Máquina de Post
-Simulador de [Máquinas de Post](http://www.iasi.cnr.it/~adp/ErrataCorrige/errataCorrigeCDCSection9.1.pdf) desenvolvido para a disciplina de Teoria da Computação (TEC).
+Simulador de [Máquinas de Post](http://www.iasi.cnr.it/~adp/ErrataCorrige/errataCorrigeCDCSection9.1.pdf) desenvolvido em C++ para a disciplina de Teoria da Computação (TEC).
 ### Instruções de Execução
 Clonar este repositório:
 
